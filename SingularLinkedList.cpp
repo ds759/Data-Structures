@@ -5,10 +5,9 @@ class Node
 public:
     int data;
     Node *next;
-
-    Node(int new_data)
+    Node(int data)
     {
-        this->data = new_data;
+        this->data = data;
         this->next = nullptr;
     }
 };
@@ -18,32 +17,26 @@ class LinkedList
 public:
     Node *head;
     Node *tail;
+    int length;
+    LinkedList()
+    {
+        this->head = nullptr;
+        this->tail = nullptr;
+        this->length = 0;
+    }
 
-    LinkedList();
-
-    void add_first(int data);
     void add(int data);
-    void add(int data, int index);
-
-    int get_first();
+    void add(int data, int position);
+    void delete_node(int position);
+    int get_length();
     void print();
+    int get_first();
 };
 
-LinkedList::LinkedList(void)
-{
-    this->head = nullptr;
-    this->tail = nullptr;
-}
-
-void LinkedList::add_first(int data)
-{
-    Node *node = new Node(data);
-    node->next = this->head;
-    this->head = node;
-}
 void LinkedList::add(int data)
 {
     Node *node = new Node(data);
+
     if (this->head == nullptr)
     {
         this->head = node;
@@ -53,20 +46,42 @@ void LinkedList::add(int data)
         this->tail->next = node;
     }
     this->tail = node;
+    this->length = this->length + 1;
 }
 
-void LinkedList::add(int data, int index)
+void LinkedList::add(int data, int position)
 {
+    Node *temp_head = this->head;
     Node *node = new Node(data);
-    int i = 1;
-    Node *n = this->head;
-    while (i < index)
+    int i = 0;
+    while (i < this->length)
     {
-        n = n->next;
+        if (i == position - 1)
+        {
+            node->next = this->head->next;
+            this->head->next = node;
+        }
+        this->head = this->head->next;
         i++;
     }
-    node->next = n->next;
-    n->next = node;
+    this->head = temp_head;
+    this->length = this->length + 1;
+}
+
+void LinkedList::print()
+{
+    Node *temp_head = this->head;
+    while (this->head != nullptr)
+    {
+        std::cout << this->head->data << '\n';
+        this->head = this->head->next;
+    }
+    this->head = temp_head;
+}
+
+int LinkedList::get_length()
+{
+    return this->length;
 }
 
 int LinkedList::get_first()
@@ -74,28 +89,15 @@ int LinkedList::get_first()
     return this->head->data;
 }
 
-void LinkedList::print()
-{
-    Node *temp = this->head;
-    while (this->head)
-    {
-        std::cout << this->head->data << '\n';
-        this->head = this->head->next;
-    }
-    this->head = temp;
-}
-
 int main()
 {
     LinkedList *llist = new LinkedList();
+    llist->add(0);
     llist->add(1);
-    llist->add(2);
+    llist->add(3);
     llist->add(4);
-    llist->add(5);
-    llist->add(6);
-    llist->add(3, 2);
-    llist->add_first(0);
+    llist->add(2, 2);
     llist->print();
-    int first = llist->get_first();
-    std::cout << first << '\n';
+    std::cout << "Length: " << llist->get_length() << '\n';
+    std::cout << "First Element : " << llist->get_first() << '\n';
 }
