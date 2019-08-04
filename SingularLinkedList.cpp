@@ -1,20 +1,19 @@
 #include <iostream>
 
-class Node
-{
-public:
-    int data;
-    Node *next;
-    Node(int data)
-    {
-        this->data = data;
-        this->next = nullptr;
-    }
-};
-
 class LinkedList
 {
 public:
+    class Node
+    {
+    public:
+        int data;
+        Node *next;
+        Node(int data)
+        {
+            this->data = data;
+            this->next = nullptr;
+        }
+    };
     Node *head;
     Node *tail;
     int length;
